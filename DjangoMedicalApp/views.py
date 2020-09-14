@@ -17,6 +17,7 @@ from .serializers import (
     CompanyBankSerializer,
     MedicineSerializer,
     MedicalDetailsSerializer,
+    MedicalDetailsSerializerSimple,
     EmployeeSerializer,
     CustomerSerializer,
     BillSerializer,
@@ -24,7 +25,7 @@ from .serializers import (
     BillDetailsSerializer,
     CustomerRequest,
     CompanyAccountSerializer,
-    EmployeeBankSerializer
+    EmployeeBankSerializer,
 )
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -119,6 +120,19 @@ class MedicineViewset(viewsets.ViewSet):
             serializer = MedicineSerializer(data=request.data, context={"request":request})
             serializer.is_valid(raise_exception=True)
             serializer.save()
+            # Adding and saving id for medicine details
+            medicine_id = serializer.data['id']
+            medicine_details_list = []
+            for medicine_detail in request.data["medicine_details"]:
+                medicine_detail["medicine_id"] = medicine_id
+                medicine_details_list.append(medicine_detail)
+            
+            print(medicine_details_list)
+            serializer2 = MedicalDetailsSerializer(data=medicine_details_list, many=True, context={"request":request})
+            serializer2.is_valid()
+            serializer2.save()
+
+
             dict_response = {"error":False, "message":"Medicine data saved successfully"}
         except:
             dict_response = {"error":True, "message":"Error during saving medicine data"}
@@ -127,6 +141,16 @@ class MedicineViewset(viewsets.ViewSet):
     def list(self, request):
         medicine = Medicine.objects.all()
         serializer = MedicineSerializer(medicine, many=True, context={'request':request})
+
+        medicine_data = serializer.data
+        newmedicinelist = []
+        # Adding extra key for medicine details in medicine
+        for medicine in medicine_data:
+            medicine_detail = MedicalDetails.objects.filter(medicine_id=medicine["id"])
+            medicine_detail_serializer = MedicalDetailsSerializerSimple(medicine_detail, many=True)
+            medicine["medicine_details"] = medicine_detail_serializer.data
+            newmedicinelist.append(medicine)
+
         response_dict = {"error":False, "message":"All Medicines List Data", "data":serializer.data}
         return Response(response_dict)
 
@@ -135,6 +159,11 @@ class MedicineViewset(viewsets.ViewSet):
         medicine = get_object_or_404(queryset, pk=pk)
         serializer = MedicineSerializer(medicine, context={"request":request})
         dict_response = {"error":False, "message":"Single data fetch","data":serializer.data}
+        
+        serializer_data = serializer.data
+        medicine_detail = MedicalDetails.objects.filter(medicine_id=serializer_data["id"])
+        medicine_detail_serializer = MedicalDetailsSerializerSimple(medicine_detail, many=True)
+        serializer_data["medicine_details"] = medicine_detail_serializer.data
         return Response(dict_response)
 
     def update(self, request, pk=None):
