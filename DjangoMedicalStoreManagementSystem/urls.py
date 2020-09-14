@@ -14,6 +14,7 @@ from DjangoMedicalApp.views import CompanyNameViewset
 router = routers.DefaultRouter()
 router.register("company", views.CompanyViewSet, basename="company")
 router.register("companybank", views.CompanyBankViewset, basename="companybank")
+router.register("medicine", views.MedicineViewset, basename="medicine")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
