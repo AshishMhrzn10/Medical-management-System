@@ -17,6 +17,14 @@ class AuthHandler {
         callback({ error: true, message: "Invalid login credentials." });
       });
   }
+
+  static loggedIn() {
+    if (reactLocalStorage.get("token") && reactLocalStorage.get("refresh")) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }
 
 export default AuthHandler;

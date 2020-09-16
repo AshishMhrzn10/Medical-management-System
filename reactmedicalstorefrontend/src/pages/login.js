@@ -1,6 +1,8 @@
 import React from "react";
 import GoogleFontLoader from "react-google-font-loader";
 import AuthHandler from "../utils/AuthHandler";
+import Config from "../utils/Config";
+import { Redirect } from "react-router-dom";
 
 import "adminbsb-materialdesign/plugins/bootstrap/css/bootstrap.css";
 import "adminbsb-materialdesign/plugins/node-waves/waves.css";
@@ -41,6 +43,7 @@ class Login extends React.Component {
       this.setState({ loginStatus: 4 });
     } else {
       this.setState({ loginStatus: 3 });
+      window.location = Config.homeUrl;
     }
   };
 
@@ -69,6 +72,9 @@ class Login extends React.Component {
   };
 
   render() {
+    if (AuthHandler.loggedIn()) {
+      return <Redirect to={Config.homeUrl} />;
+    }
     document.body.className = "login-page";
     return (
       <React.Fragment>
