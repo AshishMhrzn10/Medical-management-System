@@ -6,11 +6,19 @@ import { reactLocalStorage } from "reactjs-localstorage";
 class APIHandler {
   async checkLogin() {
     if (AuthHandler.checkTokenExpiry) {
-      var response = await Axios.post(Config.refreshApiUrl, {
-        refresh: AuthHandler.getRefreshToken(),
-      });
+      try {
+        var response = await Axios.post(Config.refreshApiUrl, {
+          refresh: AuthHandler.getRefreshToken(),
+        });
 
-      reactLocalStorage.set("token", response.data.access);
+        reactLocalStorage.set("token", response.data.access);
+      } catch (error) {
+        console.log(error);
+
+        //Not using valid toke for refresh then logout the user
+        AuthHandler.logoutUser();
+        window.location = "/";
+      }
     }
   }
 
@@ -22,7 +30,8 @@ class APIHandler {
     email,
     description
   ) {
-    this.checkLogin();
+    await this.checkLogin();
+    //wait until token get updated
     var response = await Axios.post(
       Config.companyApiUrl,
       {
@@ -35,6 +44,16 @@ class APIHandler {
       },
       { headers: { Authorization: "Bearer " + AuthHandler.getLoginToken() } }
     );
+    return response;
+  }
+
+  async fetchAllCompany() {
+    await this.checkLogin();
+
+    var response = await Axios.get(Config.companyApiUrl, {
+      headers: { Authorization: "Bearer " + AuthHandler.getLoginToken() },
+    });
+
     return response;
   }
 }
