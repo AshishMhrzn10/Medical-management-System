@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import (
-    Company, 
+    Company,
     Medicine,
     MedicalDetails,
     Employee,
@@ -10,9 +10,10 @@ from .models import (
     BillDetails,
     CustomerRequest,
     CompanyAccount,
-    CompanyBank, 
+    CompanyBank,
     EmployeeBank,
 )
+
 
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:
@@ -25,17 +26,17 @@ class CompanyBankSerializer(serializers.ModelSerializer):
         model = CompanyBank
         fields = "__all__"
 
-    def to_representation(self, instance):
-        response = super().to_representation(instance)
-        response['company'] = CompanySerializer(instance.company_id).data
-        return response
+    # def to_representation(self, instance):
+    #     response = super().to_representation(instance)
+    #     response['company'] = CompanySerializer(instance.company_id).data
+    #     return response
 
 
 class MedicineSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medicine
         fields = "__all__"
-    
+
     def to_representation(self, instance):
         response = super().to_representation(instance)
         response['company'] = CompanySerializer(instance.company_id).data
@@ -46,7 +47,7 @@ class MedicalDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = MedicalDetails
         fields = "__all__"
-    
+
     def to_representation(self, instance):
         response = super().to_representation(instance)
         response['medicine'] = MedicineSerializer(instance.medicine_id).data
@@ -57,7 +58,7 @@ class MedicalDetailsSerializerSimple(serializers.ModelSerializer):
     class Meta:
         model = MedicalDetails
         fields = "__all__"
-    
+
 
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
@@ -103,7 +104,7 @@ class BillDetailsSerializer(serializers.ModelSerializer):
         response['bill'] = BillSerializer(instance.bill_id).data
         return response
 
-    
+
 class CustomerRequest(serializers.ModelSerializer):
     class Meta:
         model = CustomerRequest
