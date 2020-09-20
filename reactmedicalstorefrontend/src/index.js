@@ -3,11 +3,14 @@ import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Login from "./pages/login";
 import { PrivateRouteNew } from "./utils/PrivateRouteNew";
-import CompanyComponent from "./pages/CompanyComponent";
-import HomeComponent from "./pages/HomeComponent";
 import Config from "./utils/Config";
+
+import HomeComponent from "./pages/HomeComponent";
 import LogoutComponent from "./pages/LogoutComponent";
+import CompanyComponent from "./pages/CompanyComponent";
 import CompanyDetailsComponent from "./pages/CompanyDetailsComponent";
+import CompanyAddBankComponent from "./pages/CompanyAddBankComponent";
+import CompanyEditBankComponent from "./pages/CompanyEditBankComponent";
 
 ReactDOM.render(
   <Router>
@@ -38,6 +41,20 @@ ReactDOM.render(
         path="/companydetails/:id"
         activepage="1"
         page={CompanyDetailsComponent}
+      ></PrivateRouteNew>
+
+      <PrivateRouteNew
+        exact
+        path="/addCompanyBank/:id"
+        activepage="1"
+        page={CompanyAddBankComponent}
+      ></PrivateRouteNew>
+
+      <PrivateRouteNew
+        exact
+        path="/editcompanybank/:company_id/:id"
+        activepage="1"
+        page={CompanyEditBankComponent}
       ></PrivateRouteNew>
     </Switch>
   </Router>,
