@@ -4,6 +4,7 @@ class Config {
   static companyApiUrl = "http://127.0.0.1:8000/api/company/";
   static companyBankApiUrl = "http://127.0.0.1:8000/api/companybank/";
   static companyOnly = "http://127.0.0.1:8000/api/companyonly/";
+  static medicineApiUrl = "http://127.0.0.1:8000/api/medicine/";
   static homeUrl = "/home";
   static logoutPageUrl = "/logout";
 

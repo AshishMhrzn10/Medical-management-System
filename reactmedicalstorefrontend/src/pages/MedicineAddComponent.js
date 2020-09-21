@@ -1,14 +1,13 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import APIHandler from "../utils/APIHandler";
 import AuthHandler from "../utils/AuthHandler";
+import APIHandler from "../utils/APIHandler";
+import { Link } from "react-router-dom";
 
 class MedicineAddComponent extends React.Component {
   constructor(props) {
     super(props);
     this.formSubmit = this.formSubmit.bind(this);
   }
-
   state = {
     errorRes: false,
     errorMessage: "",
@@ -23,13 +22,25 @@ class MedicineAddComponent extends React.Component {
   async formSubmit(event) {
     event.preventDefault();
     this.setState({ btnMessage: 1 });
+
     var apiHandler = new APIHandler();
-    var response = await apiHandler.saveCompanyBankData(
-      event.target.bank_account_no.value,
-      event.target.ifsc_no.value,
-      this.props.match.params.id
+    var response = await apiHandler.saveMedicineData(
+      event.target.name.value,
+      event.target.medical_type.value,
+      event.target.buy_price.value,
+      event.target.sell_price.value,
+      event.target.c_gst.value,
+      event.target.s_gst.value,
+      event.target.batch_no.value,
+      event.target.shelf_no.value,
+      event.target.expire_date.value,
+      event.target.mfg_date.value,
+      event.target.company_id.value,
+      event.target.description1.value,
+      event.target.in_stock_total.value,
+      event.target.qty_in_strip.value,
+      this.state.medicinedetails
     );
-    console.log(response);
     this.setState({ btnMessage: 0 });
     this.setState({ errorRes: response.data.error });
     this.setState({ errorMessage: response.data.message });
@@ -41,21 +52,24 @@ class MedicineAddComponent extends React.Component {
   }
 
   async LoadCompany() {
-    var apiHandler = new APIHandler();
-    var companydata = await apiHandler.fetchCompanyOnly();
+    var apihandler = new APIHandler();
+    var companydata = await apihandler.fetchCompanyOnly();
     this.setState({ companylist: companydata.data });
   }
 
-  RemoveItem = () => {
-    if (this.state.medicinedetails.length !== 1) {
+  RemoveItems = () => {
+    if (this.state.medicinedetails.length != 1) {
       this.state.medicinedetails.pop(this.state.medicinedetails.length - 1);
     }
     this.setState({});
   };
 
   handleInput = (event) => {
-    console.log(event.target.value);
-    console.log(event.target.getAttribute("data-index"));
+    var keyname = event.target.name;
+    var value = event.target.value;
+    var index = event.target.getAttribute("data-index");
+    this.state.medicinedetails[index][keyname] = value;
+    this.setState({});
   };
 
   AddItem = () => {
@@ -65,6 +79,7 @@ class MedicineAddComponent extends React.Component {
       salt_qty_type: "",
       description: "",
     };
+
     this.state.medicinedetails.push(item);
     this.setState({});
   };
@@ -74,7 +89,7 @@ class MedicineAddComponent extends React.Component {
       <section className="content">
         <div className="container-fluid">
           <div className="block-header">
-            <h2>MANAGE MEDICINE</h2>
+            <h2>ADD Medicine</h2>
           </div>
           <div className="row clearfix">
             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -92,11 +107,10 @@ class MedicineAddComponent extends React.Component {
                           id="name"
                           name="name"
                           className="form-control"
-                          placeholder="Enter medicine name"
+                          placeholder="Enter Name"
                         />
                       </div>
                     </div>
-
                     <label htmlFor="email_address">Medicine Type</label>
                     <div className="form-group">
                       <div className="form-line">
@@ -105,11 +119,10 @@ class MedicineAddComponent extends React.Component {
                           id="medical_type"
                           name="medical_type"
                           className="form-control"
-                          placeholder="Enter medicine type"
+                          placeholder="Enter Medicine Type"
                         />
                       </div>
                     </div>
-
                     <label htmlFor="email_address">Buy Price</label>
                     <div className="form-group">
                       <div className="form-line">
@@ -118,11 +131,10 @@ class MedicineAddComponent extends React.Component {
                           id="buy_price"
                           name="buy_price"
                           className="form-control"
-                          placeholder="Enter buy price"
+                          placeholder="Enter Buy Price"
                         />
                       </div>
                     </div>
-
                     <label htmlFor="email_address">Sell Price</label>
                     <div className="form-group">
                       <div className="form-line">
@@ -131,11 +143,10 @@ class MedicineAddComponent extends React.Component {
                           id="sell_price"
                           name="sell_price"
                           className="form-control"
-                          placeholder="Enter sell price"
+                          placeholder="Enter Sell Price"
                         />
                       </div>
                     </div>
-
                     <label htmlFor="email_address">C GST</label>
                     <div className="form-group">
                       <div className="form-line">
@@ -148,7 +159,6 @@ class MedicineAddComponent extends React.Component {
                         />
                       </div>
                     </div>
-
                     <label htmlFor="email_address">S GST</label>
                     <div className="form-group">
                       <div className="form-line">
@@ -161,7 +171,6 @@ class MedicineAddComponent extends React.Component {
                         />
                       </div>
                     </div>
-
                     <label htmlFor="email_address">Batch No.</label>
                     <div className="form-group">
                       <div className="form-line">
@@ -170,11 +179,10 @@ class MedicineAddComponent extends React.Component {
                           id="batch_no"
                           name="batch_no"
                           className="form-control"
-                          placeholder="Enter batch number"
+                          placeholder="Enter Batch No"
                         />
                       </div>
                     </div>
-
                     <label htmlFor="email_address">Shelf No.</label>
                     <div className="form-group">
                       <div className="form-line">
@@ -183,50 +191,46 @@ class MedicineAddComponent extends React.Component {
                           id="shelf_no"
                           name="shelf_no"
                           className="form-control"
-                          placeholder="Enter shelf number"
+                          placeholder="Enter Shelf No"
                         />
                       </div>
                     </div>
-
-                    <label htmlFor="email_address">Manufacture Date</label>
+                    <label htmlFor="email_address">Mfg Date</label>
                     <div className="form-group">
                       <div className="form-line">
                         <input
-                          type="text"
+                          type="date"
                           id="mfg_date"
                           name="mfg_date"
                           className="form-control"
-                          placeholder="Enter manufactured date"
+                          placeholder="Enter Mfg Date"
                         />
                       </div>
                     </div>
-
-                    <label htmlFor="email_address">Expiry Date</label>
+                    <label htmlFor="email_address">Expire Date</label>
                     <div className="form-group">
                       <div className="form-line">
                         <input
-                          type="text"
+                          type="date"
                           id="expire_date"
                           name="expire_date"
                           className="form-control"
-                          placeholder="Enter expiry date"
+                          placeholder="Enter Expire Date"
                         />
                       </div>
                     </div>
-
-                    <label htmlFor="email_address">Description</label>
+                    <label htmlFor="email_address">Description.</label>
                     <div className="form-group">
                       <div className="form-line">
                         <input
                           type="text"
-                          id="description"
-                          name="description"
+                          id="description1"
+                          name="description1"
                           className="form-control"
-                          placeholder="Enter description"
+                          placeholder="Enter Description"
                         />
                       </div>
                     </div>
-
                     <label htmlFor="email_address">In Stock Total</label>
                     <div className="form-group">
                       <div className="form-line">
@@ -235,12 +239,11 @@ class MedicineAddComponent extends React.Component {
                           id="in_stock_total"
                           name="in_stock_total"
                           className="form-control"
-                          placeholder="Enter total stocks"
+                          placeholder="Enter In Stock"
                         />
                       </div>
                     </div>
-
-                    <label htmlFor="email_address">Quantity in Strip</label>
+                    <label htmlFor="email_address">Qty. in Strip</label>
                     <div className="form-group">
                       <div className="form-line">
                         <input
@@ -248,20 +251,24 @@ class MedicineAddComponent extends React.Component {
                           id="qty_in_strip"
                           name="qty_in_strip"
                           className="form-control"
-                          placeholder="Enter quantity in strip"
+                          placeholder="Enter Description"
                         />
                       </div>
                     </div>
-
                     <label htmlFor="email_address">Company</label>
                     <div className="form-group">
-                      <select className="form-control">
+                      <select
+                        className="form-control show-tick"
+                        name="company_id"
+                        id="company_id"
+                      >
                         {this.state.companylist.map((item) => (
-                          <option value={item.id}>{item.name}</option>
+                          <option key={item.id} value={item.id}>
+                            {item.name}
+                          </option>
                         ))}
                       </select>
                     </div>
-
                     <div className="form-group">
                       <div className="col-lg-6">
                         <button
@@ -269,21 +276,21 @@ class MedicineAddComponent extends React.Component {
                           onClick={this.AddItem}
                           type="button"
                         >
-                          Add details
+                          Add Details
                         </button>
                       </div>
                       <div className="col-lg-6">
                         <button
                           className="btn btn-block btn-danger"
-                          onClick={this.RemoveItem}
                           type="button"
+                          onClick={this.RemoveItems}
                         >
-                          Remove details
+                          Remove Details
                         </button>
                       </div>
                     </div>
                     {this.state.medicinedetails.map((item, index) => (
-                      <div className="form-group-row">
+                      <div className="form-group row" key={index}>
                         <div className="col-lg-3">
                           <label htmlFor="email_address">Salt Name</label>
                           <div className="form-line">
@@ -292,45 +299,40 @@ class MedicineAddComponent extends React.Component {
                               id="salt_name"
                               name="salt_name"
                               className="form-control"
-                              placeholder="Enter salt name"
+                              placeholder="Enter Salt name"
                               onChange={this.handleInput}
                               data-index={index}
                             />
                           </div>
                         </div>
-
                         <div className="col-lg-3">
-                          <label htmlFor="email_address">Salt Quantity</label>
+                          <label htmlFor="email_address">Salt Qty</label>
                           <div className="form-line">
                             <input
                               type="text"
                               id="salt_qty"
                               name="salt_qty"
                               className="form-control"
-                              placeholder="Enter salt quantity"
+                              placeholder="Enter Salt Qty"
                               onChange={this.handleInput}
                               data-index={index}
                             />
                           </div>
                         </div>
-
                         <div className="col-lg-3">
-                          <label htmlFor="email_address">
-                            Salt Quantity Type
-                          </label>
+                          <label htmlFor="email_address">Salt Qty Type</label>
                           <div className="form-line">
                             <input
                               type="text"
                               id="salt_qty_type"
                               name="salt_qty_type"
                               className="form-control"
-                              placeholder="Enter salt quantity type"
+                              placeholder="Enter Salt Qty Type"
                               onChange={this.handleInput}
                               data-index={index}
                             />
                           </div>
                         </div>
-
                         <div className="col-lg-3">
                           <label htmlFor="email_address">Description</label>
                           <div className="form-line">
@@ -339,7 +341,7 @@ class MedicineAddComponent extends React.Component {
                               id="description"
                               name="description"
                               className="form-control"
-                              placeholder="Enter description"
+                              placeholder="Enter Description"
                               onChange={this.handleInput}
                               data-index={index}
                             />
@@ -347,31 +349,29 @@ class MedicineAddComponent extends React.Component {
                         </div>
                       </div>
                     ))}
-                    <br />
                     <button
                       type="submit"
                       className="btn btn-primary m-t-15 waves-effect btn-block"
-                      disabled={this.state.btnMessage === 0 ? false : true}
+                      disabled={this.state.btnMessage == 0 ? false : true}
                     >
-                      {this.state.btnMessage === 0
-                        ? "Add medicine"
-                        : "Adding medicine..Please wait..."}
+                      {this.state.btnMessage == 0
+                        ? "Add Medicine"
+                        : "Adding Medicine Please Wait.."}
                     </button>
                     <br />
-                    {this.state.errorRes === false &&
-                    this.state.sendData === true ? (
+                    {this.state.errorRes == false &&
+                    this.state.sendData == true ? (
                       <div className="alert alert-success">
-                        <strong>Success!!</strong>
-                        {this.state.errorMessage}
+                        <strong>Success!</strong> {this.state.errorMessage}.
                       </div>
                     ) : (
                       ""
                     )}
-                    {this.state.errorRes === true &&
-                    this.state.sendData === true ? (
+                    {this.state.errorRes == true &&
+                    this.state.sendData == true ? (
                       <div className="alert alert-danger">
-                        <strong>Fail!!</strong>
-                        {this.state.errorMessage}
+                        <strong>Failed!</strong>
+                        {this.state.errorMessage}.
                       </div>
                     ) : (
                       ""
