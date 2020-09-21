@@ -15,6 +15,9 @@ class MedicineAddComponent extends React.Component {
     btnMessage: 0,
     sendData: false,
     companylist: [],
+    medicinedetails: [
+      { salt_name: "", salt_qty: "", salt_qty_type: "", description: "" },
+    ],
   };
 
   async formSubmit(event) {
@@ -43,6 +46,29 @@ class MedicineAddComponent extends React.Component {
     this.setState({ companylist: companydata.data });
   }
 
+  RemoveItem = () => {
+    if (this.state.medicinedetails.length !== 1) {
+      this.state.medicinedetails.pop(this.state.medicinedetails.length - 1);
+    }
+    this.setState({});
+  };
+
+  handleInput = (event) => {
+    console.log(event.target.value);
+    console.log(event.target.getAttribute("data-index"));
+  };
+
+  AddItem = () => {
+    var item = {
+      salt_name: "",
+      salt_qty: "",
+      salt_qty_type: "",
+      description: "",
+    };
+    this.state.medicinedetails.push(item);
+    this.setState({});
+  };
+
   render() {
     return (
       <section className="content">
@@ -54,7 +80,7 @@ class MedicineAddComponent extends React.Component {
             <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">
               <div className="card">
                 <div className="header">
-                  <h2>Add Medicine #{this.props.match.params.id}</h2>
+                  <h2>Add Medicine</h2>
                 </div>
                 <div className="body">
                   <form onSubmit={this.formSubmit}>
@@ -236,6 +262,91 @@ class MedicineAddComponent extends React.Component {
                       </select>
                     </div>
 
+                    <div className="form-group">
+                      <div className="col-lg-6">
+                        <button
+                          className="btn btn-block btn-success"
+                          onClick={this.AddItem}
+                          type="button"
+                        >
+                          Add details
+                        </button>
+                      </div>
+                      <div className="col-lg-6">
+                        <button
+                          className="btn btn-block btn-danger"
+                          onClick={this.RemoveItem}
+                          type="button"
+                        >
+                          Remove details
+                        </button>
+                      </div>
+                    </div>
+                    {this.state.medicinedetails.map((item, index) => (
+                      <div className="form-group-row">
+                        <div className="col-lg-3">
+                          <label htmlFor="email_address">Salt Name</label>
+                          <div className="form-line">
+                            <input
+                              type="text"
+                              id="salt_name"
+                              name="salt_name"
+                              className="form-control"
+                              placeholder="Enter salt name"
+                              onChange={this.handleInput}
+                              data-index={index}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-lg-3">
+                          <label htmlFor="email_address">Salt Quantity</label>
+                          <div className="form-line">
+                            <input
+                              type="text"
+                              id="salt_qty"
+                              name="salt_qty"
+                              className="form-control"
+                              placeholder="Enter salt quantity"
+                              onChange={this.handleInput}
+                              data-index={index}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-lg-3">
+                          <label htmlFor="email_address">
+                            Salt Quantity Type
+                          </label>
+                          <div className="form-line">
+                            <input
+                              type="text"
+                              id="salt_qty_type"
+                              name="salt_qty_type"
+                              className="form-control"
+                              placeholder="Enter salt quantity type"
+                              onChange={this.handleInput}
+                              data-index={index}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="col-lg-3">
+                          <label htmlFor="email_address">Description</label>
+                          <div className="form-line">
+                            <input
+                              type="text"
+                              id="description"
+                              name="description"
+                              className="form-control"
+                              placeholder="Enter description"
+                              onChange={this.handleInput}
+                              data-index={index}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
                     <br />
                     <button
                       type="submit"
