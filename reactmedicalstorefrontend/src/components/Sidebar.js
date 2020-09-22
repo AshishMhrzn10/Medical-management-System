@@ -100,7 +100,7 @@ class Sidebar extends React.Component {
                   <li
                     key={item.index}
                     className={
-                      item.index == this.props.activepage ? "active" : ""
+                      item.index === this.props.activepage ? "active" : ""
                     }
                   >
                     <Link

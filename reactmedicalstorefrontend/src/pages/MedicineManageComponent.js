@@ -1,7 +1,5 @@
 import React from "react";
-import AuthHandler from "../utils/AuthHandler";
 import APIHandler from "../utils/APIHandler";
-import { Link } from "react-router-dom";
 
 class MedicineManageComponent extends React.Component {
   constructor(props) {
@@ -31,6 +29,8 @@ class MedicineManageComponent extends React.Component {
     description1: "",
     in_stock_total: "",
     qty_in_strip: "",
+    total_salt_list: 0,
+    medicine_id: 0,
   };
 
   async formSubmit(event) {
@@ -38,7 +38,7 @@ class MedicineManageComponent extends React.Component {
     this.setState({ btnMessage: 1 });
 
     var apiHandler = new APIHandler();
-    var response = await apiHandler.saveMedicineData(
+    var response = await apiHandler.editMedicineData(
       event.target.name.value,
       event.target.medical_type.value,
       event.target.buy_price.value,
@@ -53,7 +53,8 @@ class MedicineManageComponent extends React.Component {
       event.target.description1.value,
       event.target.in_stock_total.value,
       event.target.qty_in_strip.value,
-      this.state.medicinedetails
+      this.state.medicinedetails,
+      this.state.medicine_id
     );
     this.setState({ btnMessage: 0 });
     this.setState({ errorRes: response.data.error });
@@ -77,7 +78,7 @@ class MedicineManageComponent extends React.Component {
   }
 
   RemoveItems = () => {
-    if (this.state.medicinedetails.length != 1) {
+    if (this.state.medicinedetails.length !== this.state.total_salt_list) {
       this.state.medicinedetails.pop(this.state.medicinedetails.length - 1);
     }
     this.setState({});
@@ -97,6 +98,7 @@ class MedicineManageComponent extends React.Component {
       salt_qty: "",
       salt_qty_type: "",
       description: "",
+      id: 0,
     };
 
     this.state.medicinedetails.push(item);
@@ -104,6 +106,7 @@ class MedicineManageComponent extends React.Component {
   };
 
   viewMedicineDetails = (index) => {
+    this.setState({ medicine_id: this.state.medicineDataList[index].id });
     this.setState({
       name: this.state.medicineDataList[index].name,
       medical_type: this.state.medicineDataList[index].medical_type,
@@ -119,6 +122,10 @@ class MedicineManageComponent extends React.Component {
       description1: this.state.medicineDataList[index].description,
       in_stock_total: this.state.medicineDataList[index].in_stock_total,
       qty_in_strip: this.state.medicineDataList[index].qty_in_strip,
+    });
+    this.setState({
+      total_salt_list: this.state.medicineDataList[index].medicine_details
+        .length,
     });
     this.setState({
       medicinedetails: this.state.medicineDataList[index].medicine_details,
@@ -139,13 +146,13 @@ class MedicineManageComponent extends React.Component {
                 <div className="header">
                   {this.state.dataLoaded === false ? (
                     <div className="text-center">
-                      <div class="preloader pl-size-xl">
-                        <div class="spinner-layer">
-                          <div class="circle-clipper left">
-                            <div class="circle"></div>
+                      <div className="preloader pl-size-xl">
+                        <div className="spinner-layer">
+                          <div className="circle-clipper left">
+                            <div className="circle"></div>
                           </div>
-                          <div class="circle-clipper right">
-                            <div class="circle"></div>
+                          <div className="circle-clipper right">
+                            <div className="circle"></div>
                           </div>
                         </div>
                       </div>
@@ -491,23 +498,23 @@ class MedicineManageComponent extends React.Component {
                     <button
                       type="submit"
                       className="btn btn-primary m-t-15 waves-effect btn-block"
-                      disabled={this.state.btnMessage == 0 ? false : true}
+                      disabled={this.state.btnMessage === 0 ? false : true}
                     >
-                      {this.state.btnMessage == 0
-                        ? "Add Medicine"
-                        : "Adding Medicine Please Wait.."}
+                      {this.state.btnMessage === 0
+                        ? "Edit Medicine"
+                        : "Updating Medicine Please Wait.."}
                     </button>
                     <br />
-                    {this.state.errorRes == false &&
-                    this.state.sendData == true ? (
+                    {this.state.errorRes === false &&
+                    this.state.sendData === true ? (
                       <div className="alert alert-success">
                         <strong>Success!</strong> {this.state.errorMessage}.
                       </div>
                     ) : (
                       ""
                     )}
-                    {this.state.errorRes == true &&
-                    this.state.sendData == true ? (
+                    {this.state.errorRes === true &&
+                    this.state.sendData === true ? (
                       <div className="alert alert-danger">
                         <strong>Failed!</strong>
                         {this.state.errorMessage}.

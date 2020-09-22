@@ -1,6 +1,5 @@
 import React from "react";
 import APIHandler from "../utils/APIHandler";
-import AuthHandler from "../utils/AuthHandler";
 
 class CompanyComponent extends React.Component {
   constructor(props) {

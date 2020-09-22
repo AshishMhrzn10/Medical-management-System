@@ -2,7 +2,6 @@ import React from "react";
 import GoogleFontLoader from "react-google-font-loader";
 import Overlay from "./Overlay";
 import Navbar from "./Navbar";
-import PageLoader from "./PageLoader";
 import Sidebar from "./Sidebar";
 
 import "adminbsb-materialdesign/css/themes/all-themes.css";

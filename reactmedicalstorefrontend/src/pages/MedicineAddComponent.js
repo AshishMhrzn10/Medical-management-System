@@ -1,7 +1,5 @@
 import React from "react";
-import AuthHandler from "../utils/AuthHandler";
 import APIHandler from "../utils/APIHandler";
-import { Link } from "react-router-dom";
 
 class MedicineAddComponent extends React.Component {
   constructor(props) {
@@ -58,7 +56,7 @@ class MedicineAddComponent extends React.Component {
   }
 
   RemoveItems = () => {
-    if (this.state.medicinedetails.length != 1) {
+    if (this.state.medicinedetails.length !== 1) {
       this.state.medicinedetails.pop(this.state.medicinedetails.length - 1);
     }
     this.setState({});
@@ -352,23 +350,23 @@ class MedicineAddComponent extends React.Component {
                     <button
                       type="submit"
                       className="btn btn-primary m-t-15 waves-effect btn-block"
-                      disabled={this.state.btnMessage == 0 ? false : true}
+                      disabled={this.state.btnMessage === 0 ? false : true}
                     >
-                      {this.state.btnMessage == 0
+                      {this.state.btnMessage === 0
                         ? "Add Medicine"
                         : "Adding Medicine Please Wait.."}
                     </button>
                     <br />
-                    {this.state.errorRes == false &&
-                    this.state.sendData == true ? (
+                    {this.state.errorRes === false &&
+                    this.state.sendData === true ? (
                       <div className="alert alert-success">
                         <strong>Success!</strong> {this.state.errorMessage}.
                       </div>
                     ) : (
                       ""
                     )}
-                    {this.state.errorRes == true &&
-                    this.state.sendData == true ? (
+                    {this.state.errorRes === true &&
+                    this.state.sendData === true ? (
                       <div className="alert alert-danger">
                         <strong>Failed!</strong>
                         {this.state.errorMessage}.

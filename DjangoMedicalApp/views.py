@@ -224,6 +224,27 @@ class MedicineViewset(viewsets.ViewSet):
             medicine, data=request.data, context={"request": request})
         serializer.is_valid(raise_exception=True)
         serializer.save()
+
+        for salt_detail in request.data['medicine_details']:
+            if salt_detail['id'] == 0:
+                # For insert new salt details
+                del salt_detail['id']
+                salt_detail['medicine_id'] = serializer.data['id']
+                serializer2 = MedicalDetailsSerializer(
+                    data=salt_detail, context={"request": request})
+                serializer2.is_valid()
+                serializer2.save()
+            else:
+                # For update salt details
+                queryset2 = MedicalDetails.objects.all()
+                medicine_salt = get_object_or_404(
+                    queryset2, pk=salt_detail['id'])
+                del salt_detail['id']
+                serializer3 = MedicalDetailsSerializer(
+                    medicine_salt, data=salt_detail, context={"request": request})
+                serializer3.is_valid()
+                serializer3.save()
+
         dict_response = {"error": False,
                          "message": "Medicine data updated successfully"}
         return Response(dict_response)
