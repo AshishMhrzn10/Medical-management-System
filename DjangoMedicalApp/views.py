@@ -250,6 +250,52 @@ class MedicineViewset(viewsets.ViewSet):
         return Response(dict_response)
 
 
+class CompanyAccountViewset(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request):
+        try:
+            serializer = CompanyAccountSerializer(
+                data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Company account data saved successfully"}
+        except:
+            dict_response = {"error": True,
+                             "message": "Error during saving company account data"}
+        return Response(dict_response)
+
+    def list(self, request):
+        companyaccount = CompanyAccount.objects.all()
+        serializer = CompanyAccountSerializer(
+            companyaccount, many=True, context={'request': request})
+        response_dict = {
+            "error": False, "message": "All Companies Account List Data", "data": serializer.data}
+        return Response(response_dict)
+
+    def retrieve(self, request, pk=None):
+        queryset = CompanyAccount.objects.all()
+        companyaccount = get_object_or_404(queryset, pk=pk)
+        serializer = CompanyAccountSerializer(
+            companyaccount, context={"request": request})
+        dict_response = {"error": False,
+                         "message": "Single data fetch", "data": serializer.data}
+        return Response(dict_response)
+
+    def update(self, request, pk=None):
+        queryset = CompanyAccount.objects.all()
+        companyaccount = get_object_or_404(queryset, pk=pk)
+        serializer = CompanyAccountSerializer(
+            companyaccount, data=request.data, context={"request": request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        dict_response = {"error": False,
+                         "message": "Company bank data updated successfully"}
+        return Response(dict_response)
+
+
 company_list = CompanyViewSet.as_view({"get": "list"})
 company_create = CompanyViewSet.as_view({"post": "create"})
 company_update = CompanyViewSet.as_view({"put": "update"})
