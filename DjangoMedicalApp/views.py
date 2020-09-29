@@ -296,6 +296,52 @@ class CompanyAccountViewset(viewsets.ViewSet):
         return Response(dict_response)
 
 
+class EmployeeViewset(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request):
+        try:
+            serializer = EmployeeSerializer(
+                data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Employee data saved successfully"}
+        except:
+            dict_response = {"error": True,
+                             "message": "Error during saving employee data"}
+        return Response(dict_response)
+
+    def list(self, request):
+        employee = Employee.objects.all()
+        serializer = EmployeeSerializer(
+            employee, many=True, context={'request': request})
+        response_dict = {
+            "error": False, "message": "All Employee List Data", "data": serializer.data}
+        return Response(response_dict)
+
+    def retrieve(self, request, pk=None):
+        queryset = Employee.objects.all()
+        employee = get_object_or_404(queryset, pk=pk)
+        serializer = EmployeeSerializer(
+            employee, context={"request": request})
+        dict_response = {"error": False,
+                         "message": "Single data fetch", "data": serializer.data}
+        return Response(dict_response)
+
+    def update(self, request, pk=None):
+        queryset = Employee.objects.all()
+        employee = get_object_or_404(queryset, pk=pk)
+        serializer = EmployeeSerializer(
+            employee, data=request.data, context={"request": request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        dict_response = {"error": False,
+                         "message": "Employee data updated successfully"}
+        return Response(dict_response)
+
+
 company_list = CompanyViewSet.as_view({"get": "list"})
 company_create = CompanyViewSet.as_view({"post": "create"})
 company_update = CompanyViewSet.as_view({"put": "update"})

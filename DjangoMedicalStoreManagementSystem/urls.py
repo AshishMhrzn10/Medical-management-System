@@ -18,6 +18,7 @@ router.register("companybank", views.CompanyBankViewset,
 router.register("medicine", views.MedicineViewset, basename="medicine")
 router.register("companyaccount", views.CompanyAccountViewset,
                 basename="companyaccount")
+router.register("employee", views.EmployeeViewset, basename="employee")
 
 urlpatterns = [
     path('admin/', admin.site.urls),

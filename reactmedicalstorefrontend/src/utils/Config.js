@@ -5,6 +5,7 @@ class Config {
   static companyBankApiUrl = "http://127.0.0.1:8000/api/companybank/";
   static companyAccountApiUrl = "http://127.0.0.1:8000/api/companyaccount/";
   static companyOnly = "http://127.0.0.1:8000/api/companyonly/";
+  static employeeApiUrl = "http://127.0.0.1:8000/api/employee/";
   static medicineApiUrl = "http://127.0.0.1:8000/api/medicine/";
   static homeUrl = "/home";
   static logoutPageUrl = "/logout";
@@ -28,6 +29,12 @@ class Config {
       index: "4",
       title: "Manage Company Account",
       url: "/manageCompanyAccount",
+      icons: "assessment",
+    },
+    {
+      index: "5",
+      title: "Manage Employee",
+      url: "/employeeManage",
       icons: "assessment",
     },
   ];
