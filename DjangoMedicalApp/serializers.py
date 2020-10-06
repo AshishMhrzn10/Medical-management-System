@@ -88,11 +88,6 @@ class EmployeeSalarySerializer(serializers.ModelSerializer):
         model = EmployeeSalary
         fields = "__all__"
 
-    def to_representation(self, instance):
-        response = super().to_representation(instance)
-        response['employee'] = EmployeeSerializer(instance.employee_id).data
-        return response
-
 
 class BillDetailsSerializer(serializers.ModelSerializer):
     class Meta:

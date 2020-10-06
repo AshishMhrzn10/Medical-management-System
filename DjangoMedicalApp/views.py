@@ -342,6 +342,119 @@ class EmployeeViewset(viewsets.ViewSet):
         return Response(dict_response)
 
 
+
+class EmployeeBankViewset(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request):
+        try:
+            serializer = EmployeeBankSerializer(
+                data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Employee bank data saved successfully"}
+        except:
+            dict_response = {"error": True,
+                             "message": "Error during saving employee bank data"}
+        return Response(dict_response)
+
+    def list(self, request):
+        employeebank = EmployeeBank.objects.all()
+        serializer = EmployeeBankSerializer(
+            employeebank, many=True, context={'request': request})
+        response_dict = {
+            "error": False, "message": "All Employee Bank List Data", "data": serializer.data}
+        return Response(response_dict)
+
+    def retrieve(self, request, pk=None):
+        queryset = EmployeeBank.objects.all()
+        employeebank = get_object_or_404(queryset, pk=pk)
+        serializer = EmployeeBankSerializer(
+            employeebank, context={"request": request})
+        dict_response = {"error": False,
+                         "message": "Single data fetch", "data": serializer.data}
+        return Response(dict_response)
+
+    def update(self, request, pk=None):
+        queryset = EmployeeBank.objects.all()
+        employeebank = get_object_or_404(queryset, pk=pk)
+        serializer = EmployeeBankSerializer(
+            employeebank, data=request.data, context={"request": request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        dict_response = {"error": False,
+                         "message": "Employee bank data updated successfully"}
+        return Response(dict_response)
+
+
+class EmployeeSalaryViewset(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request):
+        try:
+            serializer = EmployeeSalarySerializer(
+                data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Employee salary data saved successfully"}
+        except:
+            dict_response = {"error": True,
+                             "message": "Error during saving employee salary data"}
+        return Response(dict_response)
+
+    def list(self, request):
+        employeesalary = EmployeeSalary.objects.all()
+        serializer = EmployeeSalarySerializer(
+            employeesalary, many=True, context={'request': request})
+        response_dict = {
+            "error": False, "message": "All Employee Salary List Data", "data": serializer.data}
+        return Response(response_dict)
+
+    def retrieve(self, request, pk=None):
+        queryset = EmployeeSalary.objects.all()
+        employeesalary = get_object_or_404(queryset, pk=pk)
+        serializer = EmployeeSalarySerializer(
+            employeesalary, context={"request": request})
+        dict_response = {"error": False,
+                         "message": "Single data fetch", "data": serializer.data}
+        return Response(dict_response)
+
+    def update(self, request, pk=None):
+        queryset = EmployeeSalary.objects.all()
+        employeesalary = get_object_or_404(queryset, pk=pk)
+        serializer = EmployeeSalarySerializer(
+            employeesalary, data=request.data, context={"request": request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        dict_response = {"error": False,
+                         "message": "Employee salary data updated successfully"}
+        return Response(dict_response)
+
+
+class EmployeeBankByEIDViewset(generics.ListAPIView):
+    serializer_class = EmployeeBankSerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        employee_id = self.kwargs['employee_id']
+        return EmployeeBank.objects.filter(employee_id=employee_id)
+
+
+class EmployeeSalaryByEIDViewset(generics.ListAPIView):
+    serializer_class = EmployeeSalarySerializer
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        employee_id = self.kwargs['employee_id']
+        return EmployeeSalary.objects.filter(employee_id=employee_id)
+
+
 company_list = CompanyViewSet.as_view({"get": "list"})
 company_create = CompanyViewSet.as_view({"post": "create"})
 company_update = CompanyViewSet.as_view({"put": "update"})

@@ -19,6 +19,8 @@ router.register("medicine", views.MedicineViewset, basename="medicine")
 router.register("companyaccount", views.CompanyAccountViewset,
                 basename="companyaccount")
 router.register("employee", views.EmployeeViewset, basename="employee")
+router.register("employee_all_bank", views.EmployeeBankViewset, basename="employee_all_bank")
+router.register("employee_all_salary", views.EmployeeSalaryViewset, basename="employee_all_salary")
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -28,4 +30,6 @@ urlpatterns = [
     path('api/companybyname/<str:name>/',
          CompanyNameViewset.as_view(), name='companybyname'),
     path('api/companyonly/', CompanyOnlyViewset.as_view(), name='companyonly'),
+    path('api/employee_bankby_id/<str:employee_id>/', views.EmployeeBankByEIDViewset.as_view(), name='employee_bankby_id'),
+    path('api/employee_salaryby_id/<str:employee_id>/', views.EmployeeSalaryByEIDViewset.as_view(), name='employee_salaryby_id'),
 ]
