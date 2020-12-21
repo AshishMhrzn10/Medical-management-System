@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
-from DjangoMedicalApp.views import CompanyNameViewset, CompanyOnlyViewset
+from DjangoMedicalApp.views import CompanyNameViewset, CompanyOnlyViewset, MedicineByNameViewset
 
 router = routers.DefaultRouter()
 router.register("company", views.CompanyViewSet, basename="company")
@@ -27,8 +27,8 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api/gettoken/', TokenObtainPairView.as_view(), name='gettoken'),
     path('api/refresh_token/', TokenRefreshView.as_view(), name='refresh_token'),
-    path('api/companybyname/<str:name>/',
-         CompanyNameViewset.as_view(), name='companybyname'),
+    path('api/companybyname/<str:name>/',CompanyNameViewset.as_view(), name='companybyname'),
+    path('api/medicinebyname/<str:name>/',MedicineByNameViewset.as_view(), name='medicinebyname'),
     path('api/companyonly/', CompanyOnlyViewset.as_view(), name='companyonly'),
     path('api/employee_bankby_id/<str:employee_id>/', views.EmployeeBankByEIDViewset.as_view(), name='employee_bankby_id'),
     path('api/employee_salaryby_id/<str:employee_id>/', views.EmployeeSalaryByEIDViewset.as_view(), name='employee_salaryby_id'),
