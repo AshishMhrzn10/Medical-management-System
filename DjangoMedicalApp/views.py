@@ -464,6 +464,48 @@ class EmployeeSalaryByEIDViewset(generics.ListAPIView):
         return EmployeeSalary.objects.filter(employee_id=employee_id)
 
 
+class GenerateBillViewSet(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request):
+        # try:
+        # First save customer data
+        serializer = CustomerSerializer(
+            data=request.data, context={"request": request})
+        serializer.is_valid()
+        serializer.save()
+        customer_id = serializer.data['id']
+
+        # Save bill data
+        billdata={}
+        billdata["customer_id"] = customer_id
+        serializer2 = BillSerializer(
+            data=billdata, context={"request": request})
+        serializer2.is_valid()
+        serializer2.save()
+        bill_id = serializer2.data['id']
+
+        medicine_details_list = []
+        for medicine_detail in request.data["medicine_details"]:
+            medicine_detail1={}
+            medicine_detail1["medicine_id"] = medicine_detail["id"]
+            medicine_detail1["bill_id"] = bill_id
+            medicine_detail1["qty"] = medicine_detail["qty"]
+            medicine_details_list.append(medicine_detail1)
+        serializer3 = BillDetailsSerializer(
+            data=medicine_details_list, many=True, context={"request": request})
+        serializer3.is_valid()
+        serializer3.save()
+
+        dict_response = {"error": False,
+                            "message": "Bill generated successfully"}
+        # except:
+        #     dict_response = {"error": True,
+        #                      "message": "Error during generating bill"}
+        return Response(dict_response)
+
+
 company_list = CompanyViewSet.as_view({"get": "list"})
 company_create = CompanyViewSet.as_view({"post": "create"})
 company_update = CompanyViewSet.as_view({"put": "update"})

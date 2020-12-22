@@ -94,11 +94,6 @@ class BillDetailsSerializer(serializers.ModelSerializer):
         model = BillDetails
         fields = "__all__"
 
-    def to_representation(self, instance):
-        response = super().to_representation(instance)
-        response['bill'] = BillSerializer(instance.bill_id).data
-        return response
-
 
 class CustomerRequest(serializers.ModelSerializer):
     class Meta:
