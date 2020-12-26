@@ -23,7 +23,7 @@ from .serializers import (
     BillSerializer,
     EmployeeSalarySerializer,
     BillDetailsSerializer,
-    CustomerRequest,
+    CustomerRequestSerializer,
     CompanyAccountSerializer,
     EmployeeBankSerializer,
 )
@@ -504,6 +504,56 @@ class GenerateBillViewSet(viewsets.ViewSet):
         #     dict_response = {"error": True,
         #                      "message": "Error during generating bill"}
         return Response(dict_response)
+
+
+class CustomerRequestViewset(viewsets.ViewSet):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def list(self, request):
+        customer_request = CustomerRequest.objects.all()
+        serializer = CustomerRequestSerializer(
+            customer_request, many=True, context={'request': request})
+        response_dict = {
+            "error": False, "message": "All Customer Request Data", "data": serializer.data}
+        return Response(response_dict)
+
+    def create(self, request):
+        try:
+            serializer = CustomerRequestSerializer(
+                data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Customer request data saved successfully"}
+        except:
+            dict_response = {"error": True,
+                             "message": "Error during saving customer request data"}
+        return Response(dict_response)
+
+    def retrieve(self, request, pk=None):
+        queryset = CustomerRequest.objects.all()
+        customer_request = get_object_or_404(queryset, pk=pk)
+        serializer = CustomerRequestSerializer(customer_request, context={"request": request})
+
+        serializer_data = serializer.data
+        return Response({"error": False, "message": "Single Data Fetch", "data": serializer_data})
+
+    def update(self, request, pk=None):
+        try:
+            queryset = CustomerRequest.objects.all()
+            customer_request = get_object_or_404(queryset, pk=pk)
+            serializer = CustomerRequestSerializer(
+                customer_request, data=request.data, context={"request": request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            dict_response = {"error": False,
+                             "message": "Customer request data updated successfully"}
+        except:
+            dict_response = {"error": True,
+                             "message": "Error during updating customer request data"}
+        return Response(dict_response)
+
 
 
 company_list = CompanyViewSet.as_view({"get": "list"})

@@ -57,6 +57,16 @@ class APIHandler {
 		return response;
 	}
 
+	async fetchAllCustomerRequest() {
+		await this.checkLogin();
+
+		var response = await Axios.get(Config.customerRequestApiUrl, {
+			headers: { Authorization: "Bearer " + AuthHandler.getLoginToken() },
+		});
+
+		return response;
+	}
+
 	async fetchAllCompanyAccount() {
 		await this.checkLogin();
 
@@ -128,6 +138,37 @@ class APIHandler {
 				bank_account_no: bank_account_no,
 				ifsc_no: ifsc_no,
 				company_id: company_id,
+			},
+			{ headers: { Authorization: "Bearer " + AuthHandler.getLoginToken() } }
+		);
+		return response;
+	}
+
+	async saveCustomerRequestData(name, phone, medicine_details) {
+		await this.checkLogin();
+		//wait until token get updated
+		var response = await Axios.post(
+			Config.customerRequestApiUrl,
+			{
+				customer_name: name,
+				phone: phone,
+				medicine_details: medicine_details,
+			},
+			{ headers: { Authorization: "Bearer " + AuthHandler.getLoginToken() } }
+		);
+		return response;
+	}
+
+	async updateCustomerRequest(customer_id, name, phone, medicine_details) {
+		await this.checkLogin();
+		//wait until token get updated
+		var response = await Axios.put(
+			Config.customerRequestApiUrl + "" + customer_id + "/",
+			{
+				customer_name: name,
+				phone: phone,
+				medicine_details: medicine_details,
+				status: 1,
 			},
 			{ headers: { Authorization: "Bearer " + AuthHandler.getLoginToken() } }
 		);

@@ -95,7 +95,7 @@ class BillDetailsSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
-class CustomerRequest(serializers.ModelSerializer):
+class CustomerRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomerRequest
         fields = "__all__"
