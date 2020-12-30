@@ -202,7 +202,7 @@ class CustomerRequestComponent extends React.Component {
 														<td>{customerRequest.phone}</td>
 														<td>{customerRequest.medicine_details}</td>
 														<td>
-															{customerRequest.status == 0
+															{customerRequest.status === 0
 																? "Pending"
 																: "Completed"}
 														</td>
@@ -212,7 +212,7 @@ class CustomerRequestComponent extends React.Component {
 															).toLocaleString()}
 														</td>
 														<td>
-															{customerRequest.status == 0 ? (
+															{customerRequest.status === 0 ? (
 																<button
 																	className="btn btn-block btn-warning"
 																	onClick={() =>

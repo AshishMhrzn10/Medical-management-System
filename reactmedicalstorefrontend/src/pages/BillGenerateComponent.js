@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import AutoCompleteMedicine from "../components/AutoCompleteMedicine";
 import APIHandler from "../utils/APIHandler";
 

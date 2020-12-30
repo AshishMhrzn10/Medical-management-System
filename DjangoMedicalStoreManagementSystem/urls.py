@@ -23,6 +23,7 @@ router.register("employee_all_bank", views.EmployeeBankViewset, basename="employ
 router.register("employee_all_salary", views.EmployeeSalaryViewset, basename="employee_all_salary")
 router.register("generate_bill_api", views.GenerateBillViewSet, basename="generate_bill_api")
 router.register("customer_request", views.CustomerRequestViewset, basename="customer_request")
+router.register("home_api", views.HomeApiViewset, basename="home_api")
 
 urlpatterns = [
     path('admin/', admin.site.urls),

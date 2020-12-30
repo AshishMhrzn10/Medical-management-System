@@ -15,7 +15,7 @@ import MedicineAddComponent from "./pages/MedicineAddComponent";
 import MedicineManageComponent from "./pages/MedicineManageComponent";
 import CompanyAccountComponent from "./pages/CompanyAccountComponent";
 import EmployeeComponent from "./pages/EmployeeComponent";
-import EmployeeDetailsComponent from "./pages/EmployeeDetailsComponent";
+// import EmployeeDetailsComponent from "./pages/EmployeeDetailsComponent";
 import BillGenerateComponent from "./pages/BillGenerateComponent";
 import CustomerRequestComponent from "./pages/CustomerRequestComponent";
 
