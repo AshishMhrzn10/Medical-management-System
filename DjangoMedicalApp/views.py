@@ -617,6 +617,28 @@ class HomeApiViewset(viewsets.ViewSet):
         medicine_expire = Medicine.objects.filter(expire_date__range=[current_date, current_date_7days])
         medicine_expire_serializer = MedicineSerializer(medicine_expire, many=True, context={"request": request})
 
+        bill_dates=BillDetails.objects.order_by().values("added_on__date").distinct()
+        profit_chart_list=[]
+        sell_chart_list=[]
+        buy_chart_list=[]
+        for billdate in bill_dates:
+            access_date=billdate["added_on__date"]
+
+            bill_data=BillDetails.objects.filter(added_on__date=access_date)
+            profit_amt_inner=0
+            sell_amt_inner=0
+            buy_amt_inner=0
+
+            for billsingle in bill_data:
+                buy_amt_inner = float(buy_amt_inner + float(billsingle.medicine_id.buy_price)) + int(billsingle.qty)
+                sell_amt_inner = float(sell_amt_inner + float(billsingle.medicine_id.sell_price)) + int(billsingle.qty)
+
+            profit_amt_inner = sell_amt_inner - buy_amt_inner
+
+            profit_chart_list.append({"date":access_date,"amt":profit_amt_inner})
+            sell_chart_list.append({"date":access_date,"amt":sell_amt_inner})
+            buy_chart_list.append({"date":access_date,"amt":buy_amt_inner})
+
 
         dict_response = {
             "error": False, 
@@ -634,6 +656,9 @@ class HomeApiViewset(viewsets.ViewSet):
             "profit_amt_today": profit_amt_today,
             "sell_amt_today": sell_amt_today,
             "medicine_expire_serializer_data": len(medicine_expire_serializer.data),
+            "sell_chart":sell_chart_list,
+            "buy_chart":buy_chart_list,
+            "profit_chart":profit_chart_list,
         }
         return Response(dict_response)
         
