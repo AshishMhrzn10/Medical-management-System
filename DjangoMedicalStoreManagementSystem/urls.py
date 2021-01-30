@@ -8,6 +8,8 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
+from django.conf.urls.static import static
+from django.conf import settings
 
 from DjangoMedicalApp.views import CompanyNameViewset, CompanyOnlyViewset, MedicineByNameViewset
 
@@ -35,4 +37,4 @@ urlpatterns = [
     path('api/companyonly/', CompanyOnlyViewset.as_view(), name='companyonly'),
     path('api/employee_bankby_id/<str:employee_id>/', views.EmployeeBankByEIDViewset.as_view(), name='employee_bankby_id'),
     path('api/employee_salaryby_id/<str:employee_id>/', views.EmployeeSalaryByEIDViewset.as_view(), name='employee_salaryby_id'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
